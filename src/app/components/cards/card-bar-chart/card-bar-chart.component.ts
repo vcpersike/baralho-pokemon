@@ -7,6 +7,7 @@ import { PokemonService } from "src/app/service/service.pokemon";
   templateUrl: "./card-bar-chart.component.html",
 })
 export class CardBarChartComponent implements OnInit, AfterViewInit {
+  multiTypeCount: number = 0;
   constructor(private servicePokemon: PokemonService) {}
 
   ngOnInit() {}
@@ -17,7 +18,6 @@ export class CardBarChartComponent implements OnInit, AfterViewInit {
 
   public pokemon() {
     this.servicePokemon.getPokemon().subscribe((data) => {
-      let multiTypeCount = 0;
       const typeCounts = {};
       const resistanceCounts = {
         Metal: 0,
@@ -33,19 +33,16 @@ export class CardBarChartComponent implements OnInit, AfterViewInit {
       };
 
       data.data.forEach((pokemon) => {
-        // Conta quantos Pokémon têm mais de um tipo
         if (pokemon.types.length > 1) {
-          multiTypeCount++;
+          this.multiTypeCount++;
         }
 
-        // Conta os tipos de cada Pokémon
         if (Array.isArray(pokemon.types)) {
           pokemon.types.forEach((type) => {
             typeCounts[type] = (typeCounts[type] || 0) + 1;
           });
         }
 
-        // Conta as resistências de cada Pokémon
         if (Array.isArray(pokemon.resistances)) {
           pokemon.resistances.forEach((resistance) => {
             if (
@@ -58,13 +55,8 @@ export class CardBarChartComponent implements OnInit, AfterViewInit {
         }
       });
 
-      console.log("Número de Pokémon com mais de um tipo: ", multiTypeCount);
-
-      // Transformando os dados de contagem em arrays para os gráficos
       const typeLabels = Object.keys(typeCounts);
       const typeData = Object.values(typeCounts);
-
-      const resistanceLabels = Object.keys(resistanceCounts);
       const resistanceData = Object.values(resistanceCounts);
       let config = {
         type: "bar",
@@ -81,8 +73,8 @@ export class CardBarChartComponent implements OnInit, AfterViewInit {
             },
             {
               label: "Count of Pokemon Resistance Types",
-              backgroundColor: "#ffffff",
-              borderColor: "#ffffff",
+              backgroundColor: "#afftrff",
+              borderColor: "#afftrff",
               data: resistanceData,
               fill: false,
               barThickness: 8,
