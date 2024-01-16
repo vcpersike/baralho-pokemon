@@ -9,8 +9,7 @@ import { PokemonService } from "src/app/service/service.pokemon";
 export class CardBarChartComponent implements OnInit, AfterViewInit {
   constructor(private servicePokemon: PokemonService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.pokemon();
@@ -18,50 +17,76 @@ export class CardBarChartComponent implements OnInit, AfterViewInit {
 
   public pokemon() {
     this.servicePokemon.getPokemon().subscribe((data) => {
-      const typeCounts = data.data.reduce((acc, pokemon) => {
-        pokemon.types.forEach(type => {
-          const existingType = acc.find(t => t.type === type);
-          if (existingType) {
-            existingType.count += 1;
-          } else {
-            acc.push({ type: type, count: 1 });
-          }
-        });
-        return acc;
-      }, []);
+      let multiTypeCount = 0;
+      const typeCounts = {};
+      const resistanceCounts = {
+        Metal: 0,
+        Grass: 0,
+        Lightning: 0,
+        Dragon: 0,
+        Darkness: 0,
+        Colorless: 0,
+        Psychic: 0,
+        Fire: 0,
+        Water: 0,
+        Fighting: 0,
+      };
 
-      const labels = typeCounts.map(t => t.type);
-      const dataCounts = typeCounts.map(t => t.count);
+      data.data.forEach((pokemon) => {
+        // Conta quantos Pokémon têm mais de um tipo
+        if (pokemon.types.length > 1) {
+          multiTypeCount++;
+        }
 
+        // Conta os tipos de cada Pokémon
+        if (Array.isArray(pokemon.types)) {
+          pokemon.types.forEach((type) => {
+            typeCounts[type] = (typeCounts[type] || 0) + 1;
+          });
+        }
+
+        // Conta as resistências de cada Pokémon
+        if (Array.isArray(pokemon.resistances)) {
+          pokemon.resistances.forEach((resistance) => {
+            if (
+              resistance.value !== "0" &&
+              resistanceCounts.hasOwnProperty(resistance.type)
+            ) {
+              resistanceCounts[resistance.type]++;
+            }
+          });
+        }
+      });
+
+      console.log("Número de Pokémon com mais de um tipo: ", multiTypeCount);
+
+      // Transformando os dados de contagem em arrays para os gráficos
+      const typeLabels = Object.keys(typeCounts);
+      const typeData = Object.values(typeCounts);
+
+      const resistanceLabels = Object.keys(resistanceCounts);
+      const resistanceData = Object.values(resistanceCounts);
       let config = {
         type: "bar",
         data: {
-          labels: labels,
+          labels: typeLabels,
           datasets: [
             {
               label: "Count of Pokemon Types",
               backgroundColor: "#4c51bf",
               borderColor: "#4c51bf",
-              data: dataCounts,
+              data: typeData,
               fill: false,
               barThickness: 8,
             },
             {
-              label: "Count of Pokemon Damage Types",
+              label: "Count of Pokemon Resistance Types",
               backgroundColor: "#ffffff",
               borderColor: "#ffffff",
-              data: dataCounts,
+              data: resistanceData,
               fill: false,
               barThickness: 8,
             },
-            {
-              label: "Count of Pokemon Damage Types",
-              backgroundColor: "#pppppp",
-              borderColor: "#pppppp",
-              data: dataCounts,
-              fill: false,
-              barThickness: 8,
-            }
           ],
         },
         options: {
@@ -125,9 +150,9 @@ export class CardBarChartComponent implements OnInit, AfterViewInit {
           },
         },
       };
-    let ctx: any = document.getElementById("bar-chart");
-    ctx = ctx.getContext("2d");
-    new Chart(ctx, config);
+      let ctx: any = document.getElementById("bar-chart");
+      ctx = ctx.getContext("2d");
+      new Chart(ctx, config);
     });
   }
 }
