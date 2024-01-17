@@ -1,0 +1,19 @@
+<!-- pagination.component.html -->
+<div class="flex justify-center w-full">
+  <ul class="flex list-none p-0">
+    <li class="page-item mr-2" (click)="goToPreviousPage()">
+      <a class="page-link cursor-pointer">Anterior</a>
+    </li>
+
+    <!-- Loop para exibir os números das páginas -->
+    <li *ngFor="let page of pages" class="page-item mr-2"
+    [ngClass]="{'bg-yellow-500 text-white rounded-full w-6 h-6 flex items-center justify-center': page === currentPage}">
+  <a class="page-link cursor-pointer" (click)="goToPage(page)">{{ page }}</a>
+</li>
+
+    <li class="page-item mr-2" (click)="goToNextPage()">
+      <a class="page-link cursor-pointer">Próxima</a>
+    </li>
+  </ul>
+</div>
+

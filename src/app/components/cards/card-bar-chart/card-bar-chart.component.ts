@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, ViewChild, ElementRef } from "@angular/core";
 import Chart from "chart.js";
 import { PokemonService } from "src/app/service/service.pokemon";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: "app-card-bar-chart",
@@ -8,57 +9,86 @@ import { PokemonService } from "src/app/service/service.pokemon";
 })
 export class CardBarChartComponent implements OnInit, AfterViewInit {
   multiTypeCount: number = 0;
-  constructor(private servicePokemon: PokemonService) {}
+  currentPage: number = 1;
+  itemsPerPage: number = 10; // ajuste conforme necessário
+  totalItems: number = 0;
+  myChart: Chart;
+  isLoading: boolean = false;
+  constructor(private servicePokemon: PokemonService, private changeDetectorRef: ChangeDetectorRef,) {}
 
-  ngOnInit() {}
+  ngOnInit() {
 
-  ngAfterViewInit() {
-    this.pokemon();
   }
 
-  public pokemon() {
-    this.servicePokemon.getPokemon().subscribe((data) => {
-      const typeCounts = {};
-      const resistanceCounts = {
-        Metal: 0,
-        Grass: 0,
-        Lightning: 0,
-        Dragon: 0,
-        Darkness: 0,
-        Colorless: 0,
-        Psychic: 0,
-        Fire: 0,
-        Water: 0,
-        Fighting: 0,
-      };
+  ngAfterViewInit() {
+    this.updateState();
+    this.getPokemons();
+  }
 
-      data.data.forEach((pokemon) => {
-        if (pokemon.types.length > 1) {
-          this.multiTypeCount++;
-        }
+  ngOnDestroy() {
+    if (this.myChart) {
+      this.myChart.destroy();
+    }
+  }
 
-        if (Array.isArray(pokemon.types)) {
-          pokemon.types.forEach((type) => {
-            typeCounts[type] = (typeCounts[type] || 0) + 1;
-          });
-        }
+  private updateState(): void {
+    this.isLoading = true; // ou false
+    this.changeDetectorRef.detectChanges();
+  }
 
-        if (Array.isArray(pokemon.resistances)) {
-          pokemon.resistances.forEach((resistance) => {
-            if (
-              resistance.value !== "0" &&
-              resistanceCounts.hasOwnProperty(resistance.type)
-            ) {
-              resistanceCounts[resistance.type]++;
-            }
-          });
-        }
-      });
+  onChangePage(page: number) {
+    this.currentPage = page;
+    this.getPokemons();
+  }
 
-      const typeLabels = Object.keys(typeCounts);
-      const typeData = Object.values(typeCounts);
-      const resistanceData = Object.values(resistanceCounts);
-      let config = {
+  private processData(pokemons: any[]): void {
+    const typeCounts = {};
+    const resistanceCounts = {
+      Metal: 0,
+      Grass: 0,
+      Lightning: 0,
+      Dragon: 0,
+      Darkness: 0,
+      Colorless: 0,
+      Psychic: 0,
+      Fire: 0,
+      Water: 0,
+      Fighting: 0,
+    };
+
+    pokemons.forEach((pokemon) => {
+      if (pokemon.types && Array.isArray(pokemon.types) && pokemon.types.length > 1) {
+        this.multiTypeCount++;
+      }
+    });
+
+    pokemons.forEach((pokemon) => {
+      if (Array.isArray(pokemon.types)) {
+        pokemon.types.forEach((type) => {
+          typeCounts[type] = (typeCounts[type] || 0) + 1;
+        });
+      }
+
+      if (Array.isArray(pokemon.resistances)) {
+        pokemon.resistances.forEach((resistance) => {
+          if (resistance.value !== "0" && resistanceCounts.hasOwnProperty(resistance.type)) {
+            resistanceCounts[resistance.type]++;
+          }
+        });
+      }
+    });
+    const typeLabels = Object.keys(typeCounts);
+
+    this.updateChartData(typeCounts, resistanceCounts, typeLabels);
+  }
+
+  private updateChartData(typeCounts: object, resistanceCounts: object, typeLabels: string[]): void {
+    const typeData = Object.values(typeCounts);
+    const resistanceData = Object.values(resistanceCounts);
+    const canvas = document?.getElementById('bar-chart') as HTMLCanvasElement;
+    const ctx = canvas?.getContext('2d');
+    if (!this.myChart) {
+      this.myChart = new Chart(ctx, {
         type: "bar",
         data: {
           labels: typeLabels,
@@ -141,10 +171,26 @@ export class CardBarChartComponent implements OnInit, AfterViewInit {
             ],
           },
         },
-      };
-      let ctx: any = document.getElementById("bar-chart");
-      ctx = ctx.getContext("2d");
-      new Chart(ctx, config);
-    });
+      });
+    } else {
+      this.myChart.data.labels = typeLabels;
+      this.myChart.data.datasets[0].data = typeData;
+      this.myChart.data.datasets[1].data = resistanceData;
+      this.myChart.update();
+    }
+  }
+
+  public getPokemons(): void {
+    this.isLoading = true;
+    this.servicePokemon.getPokemonsPaginated(this.currentPage, this.itemsPerPage)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe(response => {
+        this.totalItems = response.totalCount;
+        this.processData(response.data);
+      }, error => {
+        console.error('Erro ao carregar os dados:', error);
+      });
   }
 }

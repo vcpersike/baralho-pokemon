@@ -13,4 +13,11 @@ export class PokemonService {
     const url = 'https://api.pokemontcg.io/v2/cards';
     return this.http.get(url);
   }
+
+  getPokemonsPaginated(page: number, itemsPerPage: number): Observable<any> {
+    // Substitua pela URL real da sua API
+    const url = `https://api.pokemontcg.io/v2/cards?page=${page}&itemsPerPage=${itemsPerPage}`;
+    return this.http.get<any>(url);
+  }
+
 }

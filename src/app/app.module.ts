@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -18,10 +18,8 @@ import { ProfileComponent } from "./views/profile/profile.component";
 // components for views and layouts
 import { AdminNavbarComponent } from "./components/navbars/admin-navbar/admin-navbar.component";
 import { CardBarChartComponent } from "./components/cards/card-bar-chart/card-bar-chart.component";
-import { CardLineChartComponent } from "./components/cards/card-line-chart/card-line-chart.component";
 import { CardPageVisitsComponent } from "./components/cards/card-page-visits/card-page-visits.component";
 import { CardProfileComponent } from "./components/cards/card-profile/card-profile.component";
-import { CardSocialTrafficComponent } from "./components/cards/card-social-traffic/card-social-traffic.component";
 import { CardStatsComponent } from "./components/cards/card-stats/card-stats.component";
 import { CardTableComponent } from "./components/cards/card-table/card-table.component";
 import { FooterAdminComponent } from "./components/footers/footer-admin/footer-admin.component";
@@ -31,18 +29,19 @@ import { HeaderStatsComponent } from "./components/headers/header-stats/header-s
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { PokemonService } from "./service/service.pokemon";
 import { HttpClientModule } from "@angular/common/http";
+import { CommonModule } from "@angular/common";
+import { PaginationControlComponent } from "./components/pagination-control/pagination-control.component";
+import { SpinnerComponent } from "./components/spinner/spinner.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     CardBarChartComponent,
-    CardLineChartComponent,
     SidebarComponent,
     FooterAdminComponent,
     CardPageVisitsComponent,
     CardProfileComponent,
-    CardSocialTrafficComponent,
     CardStatsComponent,
     CardTableComponent,
     HeaderStatsComponent,
@@ -50,8 +49,11 @@ import { HttpClientModule } from "@angular/common/http";
     AdminComponent,
     TablesComponent,
     ProfileComponent,
+    PaginationControlComponent,
+    SpinnerComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, CommonModule],
   providers: [PokemonService],
   bootstrap: [AppComponent],
 })
