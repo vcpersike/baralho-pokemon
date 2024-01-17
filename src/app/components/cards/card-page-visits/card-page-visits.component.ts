@@ -7,6 +7,7 @@ import { PokemonService } from "src/app/service/service.pokemon";
   styleUrls: ["./card-page-visits.component.css"],
 })
 export class CardPageVisitsComponent implements OnInit {
+  selectedPokemons: number[] = [];
   isLoading: boolean = false;
   pokemons: any[] = [];
   currentPage: number = 1;
@@ -30,7 +31,6 @@ export class CardPageVisitsComponent implements OnInit {
       .subscribe(response => {
         this.pokemons = response.data;
         this.totalItems = response.totalCount;
-        console.log(response);
         this.isLoading = false;
       }, error => {
         this.isLoading = false;
@@ -38,10 +38,13 @@ export class CardPageVisitsComponent implements OnInit {
   }
 
   onSelectPokemon(pokemonId: number, event: any) {
+    this.servicePokemon.setSelectedPokemons(this.selectedPokemons);
+
     if (event.target.checked) {
-      // Logic to handle selection
+      this.selectedPokemons.push(pokemonId);
     } else {
-      // Logic to handle deselection
+      this.selectedPokemons = this.selectedPokemons.filter(id => id !== pokemonId);
     }
+    this.servicePokemon.setSelectedPokemons(this.selectedPokemons);
   }
 }
