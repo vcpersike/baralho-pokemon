@@ -19,7 +19,6 @@ import { ProfileComponent } from "./views/profile/profile.component";
 import { AdminNavbarComponent } from "./components/navbars/admin-navbar/admin-navbar.component";
 import { CardBarChartComponent } from "./components/cards/card-bar-chart/card-bar-chart.component";
 import { CardPageVisitsComponent } from "./components/cards/card-page-visits/card-page-visits.component";
-import { CardProfileComponent } from "./components/cards/card-profile/card-profile.component";
 import { CardStatsComponent } from "./components/cards/card-stats/card-stats.component";
 import { CardTableComponent } from "./components/cards/card-table/card-table.component";
 import { FooterAdminComponent } from "./components/footers/footer-admin/footer-admin.component";
@@ -41,7 +40,6 @@ import { SpinnerComponent } from "./components/spinner/spinner.component";
     SidebarComponent,
     FooterAdminComponent,
     CardPageVisitsComponent,
-    CardProfileComponent,
     CardStatsComponent,
     CardTableComponent,
     HeaderStatsComponent,

@@ -14,20 +14,28 @@ export class HeaderStatsComponent implements OnInit {
   statDescripiron: string;
   statIconName: string;
   statIconColor: string;
+  selectedPokemonIds: string[] = [];
 
   constructor(private servicePokemon: PokemonService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.statTitle = "BARALHO";
+    this.statIconColor = "bg-red-500";
+    this.statIconName = "fas fa-chart-bar";
+    this.statTitle = "Baralho em construção";
     this.statDescripiron = "Click no icone para salvar seus dados";
-    this.statSubtitle = "Baralho em construção";
+    this.statSubtitle = "Para editar seu baralho, click aqui";
+    this.selectCheck();
+  }
+
+
+  selectCheck() {
     this.servicePokemon.selectedPokemons$.subscribe(selectedIds => {
+      this.selectedPokemonIds = selectedIds.map(id => id.toString());
       this.statPercent = selectedIds.length.toString();
       this.updateStatPercentColor();
       this.cdr.detectChanges();
     });
   }
-
   updateStatPercentColor() {
     const percentValue = parseFloat(this.statPercent);
 
