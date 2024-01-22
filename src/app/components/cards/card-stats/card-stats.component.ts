@@ -6,6 +6,7 @@ import { PokemonService } from "src/app/service/service.pokemon";
   templateUrl: "./card-stats.component.html",
 })
 export class CardStatsComponent implements OnInit {
+  erroMensagem: string = '';
   baralho: {
     name: string;
     cards: any[];
@@ -43,13 +44,42 @@ export class CardStatsComponent implements OnInit {
 
   saveSelection() {
     this.servicePokemon.getBaralho().subscribe((baralhos) => {
-      this.baralhos = baralhos;
+      const nomeContagem = new Map();
+
+      for (const baralho of baralhos) {
+        if (!baralho.nome) {
+          continue;
+        }
+
+        const contagem = nomeContagem.get(baralho.nome) || 0;
+        if (contagem >= 4) {
+          this.erroMensagem = `O nome ${baralho.nome} já aparece 4 vezes.`;
+          return;
+        }
+
+        nomeContagem.set(baralho.nome, contagem + 1);
+      }
+
+      const numeroDeCartas = baralhos.length;
+      if (numeroDeCartas < 24 || numeroDeCartas > 60) {
+        this.erroMensagem = "O baralho deve ter entre 24 e 60 cartas.";
+        return;
+      }else {
+        this.erroMensagem = '';
+      }
+
+      const novoBaralho = {
+        name: this.statTitle,
+        cards: baralhos,
+        number: numeroDeCartas,
+      };
+
+      const currentList = this.servicePokemon.listBaralhoCard.getValue();
+      const updatedList = [...currentList, novoBaralho];
+      this.servicePokemon.listBaralhoCard.next(updatedList);
+
+      this.servicePokemon.baralhoCard.next(this.statTitle);
     });
-    this.servicePokemon.baralhoCard.next(this.statTitle);
-    this.servicePokemon.listBaralhoCard.next([{
-      name: this.statTitle,
-      cards: this.baralhos,
-      number: this.baralhos.length,
-    }]);
   }
+
 }

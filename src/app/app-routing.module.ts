@@ -8,9 +8,6 @@ import { AdminComponent } from "./layouts/admin.component";
 import { DashboardComponent } from "./views/admin/dashboard/dashboard.component";
 import { TablesComponent } from "./views/admin/tables/tables.component";
 
-// no layouts views
-import { ProfileComponent } from "./views/profile/profile.component";
-
 const routes: Routes = [
   // admin views
   {
@@ -22,7 +19,6 @@ const routes: Routes = [
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
     ],
   },
-  { path: "profile", component: ProfileComponent },
   { path: "**", redirectTo: "", pathMatch: "full" },
 ];
 

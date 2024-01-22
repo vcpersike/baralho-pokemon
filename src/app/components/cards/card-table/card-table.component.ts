@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Baralho } from "./baralho-interface";
 import { PokemonService } from "src/app/service/service.pokemon";
 
 @Component({
@@ -7,9 +6,7 @@ import { PokemonService } from "src/app/service/service.pokemon";
   templateUrl: "./card-table.component.html",
 })
 export class CardTableComponent implements OnInit {
-  baralhos: Baralho[] = [];
-
-  @Input() selectedPokemonIds: string[];
+  public baralhos: any[] = [];
   @Input()
   get color(): string {
     return this._color;
@@ -22,9 +19,18 @@ export class CardTableComponent implements OnInit {
   constructor(private servicePokemon: PokemonService) {}
 
   ngOnInit(): void {
-    this.servicePokemon.getListBaralhoCard().subscribe((baralho) => {
-      this.baralhos = baralho;
-      console.log(this.baralhos);
+    this.servicePokemon.listBaralhoCard.subscribe(baralhosAtualizados => {
+      this.baralhos = baralhosAtualizados;
     });
+  }
+
+  ngOnDestroy() {
+    this.servicePokemon.listBaralhoCard.next([]);
+  }
+
+  excluirBaralho(index: number) {
+    const currentList = this.servicePokemon.listBaralhoCard.getValue();
+    const updatedList = currentList.filter((_, i) => i !== index);
+    this.servicePokemon.listBaralhoCard.next(updatedList);
   }
 }

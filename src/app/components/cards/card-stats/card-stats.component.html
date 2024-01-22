@@ -32,5 +32,8 @@
       </span>
       <span class="whitespace-nowrap">{{ statDescripiron }}</span>
     </p>
+    <div *ngIf="erroMensagem" class="text-red-500 text-xs">
+      {{ erroMensagem }}
+    </div>
   </div>
 </div>

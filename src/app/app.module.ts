@@ -13,7 +13,6 @@ import { DashboardComponent } from "./views/admin/dashboard/dashboard.component"
 import { TablesComponent } from "./views/admin/tables/tables.component";
 
 // no layouts views
-import { ProfileComponent } from "./views/profile/profile.component";
 
 // components for views and layouts
 import { AdminNavbarComponent } from "./components/navbars/admin-navbar.component";
@@ -47,7 +46,6 @@ import { FormsModule } from "@angular/forms";
     AdminNavbarComponent,
     AdminComponent,
     TablesComponent,
-    ProfileComponent,
     PaginationControlComponent,
     SpinnerComponent
   ],

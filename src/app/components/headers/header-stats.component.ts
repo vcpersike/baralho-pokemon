@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { PokemonService } from "src/app/service/service.pokemon";
-import { Baralho } from "../cards/card-table/baralho-interface";
 
 @Component({
   selector: "app-header-stats",
