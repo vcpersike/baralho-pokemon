@@ -1,13 +1,26 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { PokemonService } from "src/app/service/service.pokemon";
 
 @Component({
   selector: "app-card-stats",
   templateUrl: "./card-stats.component.html",
 })
 export class CardStatsComponent implements OnInit {
+  baralho: {
+    name: string;
+    cards: any[];
+    number: number;
+  } = {
+    name: "",
+    cards: [],
+    number: 0,
+  };
+  baralhos: string[] = [];
+  @Input() statTitle: string;
+  @Output() statTitleChange = new EventEmitter<string>();
+  isEditing: boolean = false;
   @Input() selectedPokemonIds: string[];
   @Input() statSubtitle: string;
-  @Input() statTitle: string;
   @Input() statArrow: string;
   @Input() statPercent: string;
   @Input() statPercentColor: string;
@@ -15,11 +28,28 @@ export class CardStatsComponent implements OnInit {
   @Input() statIconName: string;
   @Input() statIconColor: string;
 
-  constructor() {}
+  constructor(private servicePokemon: PokemonService) {}
 
   ngOnInit(): void {}
 
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
+  }
+
+  saveTitle(newTitle: string) {
+    this.statTitle = newTitle;
+    this.toggleEdit();
+  }
+
   saveSelection() {
-    console.log("Pokémons selecionados:", this.selectedPokemonIds);
+    this.servicePokemon.getBaralho().subscribe((baralhos) => {
+      this.baralhos = baralhos;
+    });
+    this.servicePokemon.baralhoCard.next(this.statTitle);
+    this.servicePokemon.listBaralhoCard.next([{
+      name: this.statTitle,
+      cards: this.baralhos,
+      number: this.baralhos.length,
+    }]);
   }
 }

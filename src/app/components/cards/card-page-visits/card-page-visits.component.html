@@ -1,4 +1,6 @@
+
 <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+
   <div class="rounded-t mb-0 px-4 py-3 border-0">
     <div class="flex flex-wrap items-center">
       <div class="relative w-full px-4 max-w-full flex-grow flex-1">
@@ -10,12 +12,17 @@
           type="button">
           Reiniciar
         </button>
+         <span> N {{ selectedPokemons.length }}</span>
       </div>
+
     </div>
   </div>
-  <div class="block w-full overflow-x-auto">
+  <div class="flex justify-center items-center relative ">
+    <app-spinner *ngIf="isLoading" class="absolute mx-auto my-auto w-48"></app-spinner>
+  </div>
+  <div class="block w-full w-125rem overflow-x-auto ">
     <table class="items-center w-full bg-transparent border-collapse">
-      <thead>
+      <thead class="fixed-head">
         <tr>
           <th
             class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
@@ -39,7 +46,9 @@
           </th>
         </tr>
       </thead>
+
       <tbody>
+
         <tr *ngFor="let pokemon of pokemons">
           <td class="relative border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
             <div class="pokeball-icon">
@@ -56,18 +65,14 @@
             {{ pokemon.hp }}
           </td>
           <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-            <input type="checkbox" [value]="pokemon.id" (change)="onSelectPokemon(pokemon.id, $event)">
+            <input type="checkbox" [value]="pokemon.id" (change)="onSelectPokemon(pokemon, $event)">
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="flex justify-center items-center">
-      <app-spinner *ngIf="isLoading"></app-spinner>
-    </div>
-    <!-- Em outro componente HTML -->
-    <app-pagination-control [totalItems]="totalItems" [itemsPerPage]="itemsPerPage"
-      (pageChanged)="onChangePage($event)">
-    </app-pagination-control>
-
   </div>
+
+  <app-pagination-control [totalItems]="totalItems" [itemsPerPage]="itemsPerPage"
+  (pageChanged)="onChangePage($event)">
+</app-pagination-control>
 </div>

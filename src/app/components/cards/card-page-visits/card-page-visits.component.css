@@ -1,3 +1,18 @@
+.w-125rem {
+  height: 31.25rem;
+}
+
+.w-48{
+  top: 16rem;
+}
+
+.fixed-head {
+  position: sticky;
+  top: -0.3rem;
+  z-index: 1;
+
+}
+
 .pokemon-image {
   position: absolute;
   z-index: 10;

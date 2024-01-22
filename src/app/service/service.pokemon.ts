@@ -1,16 +1,19 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PokemonService {
+  public baralhoSource = new BehaviorSubject<number[]>([]);
+  public baralhoCard = new BehaviorSubject<string>("");
+  public listBaralhoCard = new BehaviorSubject<any[]>([]);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getPokemon(): Observable<any> {
-    const url = 'https://api.pokemontcg.io/v2/cards';
+    const url = "https://api.pokemontcg.io/v2/cards";
     return this.http.get(url);
   }
 
@@ -27,4 +30,15 @@ export class PokemonService {
     this.selectedPokemonsSource.next(ids);
   }
 
+  getBaralho(): Observable<any> {
+    return this.baralhoSource.asObservable();
+  }
+
+  getBaralhoCard(): Observable<any> {
+    return this.baralhoCard.asObservable();
+  }
+
+  getListBaralhoCard(): Observable<any> {
+    return this.listBaralhoCard.asObservable();
+  }
 }

@@ -1,10 +1,15 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { Baralho } from "./baralho-interface";
+import { PokemonService } from "src/app/service/service.pokemon";
 
 @Component({
   selector: "app-card-table",
   templateUrl: "./card-table.component.html",
 })
 export class CardTableComponent implements OnInit {
+  baralhos: Baralho[] = [];
+
+  @Input() selectedPokemonIds: string[];
   @Input()
   get color(): string {
     return this._color;
@@ -14,7 +19,12 @@ export class CardTableComponent implements OnInit {
   }
   private _color = "light";
 
-  constructor() {}
+  constructor(private servicePokemon: PokemonService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.servicePokemon.getListBaralhoCard().subscribe((baralho) => {
+      this.baralhos = baralho;
+      console.log(this.baralhos);
+    });
+  }
 }

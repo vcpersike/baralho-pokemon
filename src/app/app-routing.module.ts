@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
 // layouts
-import { AdminComponent } from "./layouts/admin/admin.component";
+import { AdminComponent } from "./layouts/admin.component";
 
 // admin views
 import { DashboardComponent } from "./views/admin/dashboard/dashboard.component";

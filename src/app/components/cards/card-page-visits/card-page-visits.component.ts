@@ -39,12 +39,12 @@ export class CardPageVisitsComponent implements OnInit {
 
   onSelectPokemon(pokemonId: number, event: any) {
     this.servicePokemon.setSelectedPokemons(this.selectedPokemons);
-
     if (event.target.checked) {
       this.selectedPokemons.push(pokemonId);
     } else {
       this.selectedPokemons = this.selectedPokemons.filter(id => id !== pokemonId);
     }
     this.servicePokemon.setSelectedPokemons(this.selectedPokemons);
+    this.servicePokemon.baralhoSource.next(this.selectedPokemons);
   }
 }

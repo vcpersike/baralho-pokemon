@@ -1,13 +1,15 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { PokemonService } from "src/app/service/service.pokemon";
+import { Baralho } from "../cards/card-table/baralho-interface";
 
 @Component({
   selector: "app-header-stats",
   templateUrl: "./header-stats.component.html",
 })
 export class HeaderStatsComponent implements OnInit {
-  statSubtitle: string;
+  seusBaralhos: string[] = [];
   statTitle: string;
+  statSubtitle: string;
   statArrow: string;
   statPercent: string;
   statPercentColor: string;
@@ -21,12 +23,15 @@ export class HeaderStatsComponent implements OnInit {
   ngOnInit() {
     this.statIconColor = "bg-red-500";
     this.statIconName = "fas fa-chart-bar";
-    this.statTitle = "Baralho em construção";
+    this.statTitle = "De um nome ao seu baralho";
     this.statDescripiron = "Click no icone para salvar seus dados";
     this.statSubtitle = "Para editar seu baralho, click aqui";
     this.selectCheck();
   }
 
+  handleTitleChange(newTitle: string) {
+    this.statTitle = newTitle;
+  }
 
   selectCheck() {
     this.servicePokemon.selectedPokemons$.subscribe(selectedIds => {
@@ -42,9 +47,8 @@ export class HeaderStatsComponent implements OnInit {
     if (percentValue < 24) {
       this.statPercentColor = 'text-red-500';
       this.statArrow = 'up';
-    } else if (percentValue >= 24 && percentValue <= 60) {
+    } else if (percentValue > 23 && percentValue < 61) {
       this.statPercentColor = 'text-emerald-500';
-      this.statArrow = 'up';
     } else {
       this.statPercentColor = 'text-red-500';
       this.statArrow = 'down';

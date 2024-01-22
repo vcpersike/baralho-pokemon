@@ -4,12 +4,13 @@
   <div class="flex-auto p-4">
     <div class="flex flex-wrap">
       <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-        <h5 class="text-blueGray-400  font-bold text-xs" >
+        <h5 class="text-blueGray-400  font-bold text-xs cursor-pointer" [routerLink]="['/tables']">
           {{ statSubtitle }}
         </h5>
-        <span class="font-semibold uppercase text-xl text-blueGray-700">
+        <div *ngIf="!isEditing" (click)="toggleEdit()">
           {{ statTitle }}
-        </span>
+        </div>
+        <input *ngIf="isEditing" type="text" [(ngModel)]="statTitle" (blur)="toggleEdit()" />
       </div>
       <div class="relative w-auto pl-4 flex-initial">
         <div
