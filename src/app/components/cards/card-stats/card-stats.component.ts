@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { take } from "rxjs/operators";
 import { PokemonService } from "src/app/service/service.pokemon";
 
 @Component({
@@ -43,7 +44,9 @@ export class CardStatsComponent implements OnInit {
   }
 
   saveSelection() {
-    this.servicePokemon.getBaralho().subscribe((baralhos) => {
+    this.servicePokemon.getBaralho().pipe(
+      take(1)
+    ).subscribe((baralhos) => {
       const nomeContagem = new Map();
 
       for (const baralho of baralhos) {

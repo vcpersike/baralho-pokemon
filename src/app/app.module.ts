@@ -4,17 +4,13 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-// layouts
 import { AdminComponent } from "./layouts/admin.component";
 
-// admin views
-import { DashboardComponent } from "./views/admin/dashboard/dashboard.component";
+import { DashboardComponent } from "./views/dashboard/dashboard.component";
 
-import { TablesComponent } from "./views/admin/tables/tables.component";
+import { TablesComponent } from "./views/tables/tables.component";
 
-// no layouts views
 
-// components for views and layouts
 import { AdminNavbarComponent } from "./components/navbars/admin-navbar.component";
 import { CardBarChartComponent } from "./components/cards/card-bar-chart/card-bar-chart.component";
 import { CardPageVisitsComponent } from "./components/cards/card-page-visits/card-page-visits.component";
@@ -31,6 +27,7 @@ import { CommonModule } from "@angular/common";
 import { PaginationControlComponent } from "./components/pagination-control/pagination-control.component";
 import { SpinnerComponent } from "./components/spinner/spinner.component";
 import { FormsModule } from "@angular/forms";
+import { EditarComponent } from "./components/cards/card-editar/card-editar.component";
 
 @NgModule({
   declarations: [
@@ -42,6 +39,7 @@ import { FormsModule } from "@angular/forms";
     CardPageVisitsComponent,
     CardStatsComponent,
     CardTableComponent,
+    EditarComponent,
     HeaderStatsComponent,
     AdminNavbarComponent,
     AdminComponent,
