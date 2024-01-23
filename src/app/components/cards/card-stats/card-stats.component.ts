@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { take } from "rxjs/operators";
 import { PokemonService } from "src/app/service/service.pokemon";
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: "app-card-stats",
@@ -9,10 +10,12 @@ import { PokemonService } from "src/app/service/service.pokemon";
 export class CardStatsComponent implements OnInit {
   erroMensagem: string = '';
   baralho: {
+    id: string;
     name: string;
     cards: any[];
     number: number;
   } = {
+    id: uuidv4(),
     name: "",
     cards: [],
     number: 0,
@@ -72,6 +75,7 @@ export class CardStatsComponent implements OnInit {
       }
 
       const novoBaralho = {
+        id: uuidv4(),
         name: this.statTitle,
         cards: baralhos,
         number: numeroDeCartas,

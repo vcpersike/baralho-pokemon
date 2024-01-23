@@ -15,7 +15,7 @@ const routes: Routes = [
     children: [
       { path: "dashboard", component: DashboardComponent },
       { path: "tables", component: TablesComponent },
-      { path: "editar", component: EditarComponent},
+      { path: "editar/:id", component: EditarComponent},
       { path: "", redirectTo: "dashboard", pathMatch: "full" },
     ],
   },
