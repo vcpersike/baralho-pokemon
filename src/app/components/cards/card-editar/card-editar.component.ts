@@ -93,14 +93,14 @@ export class EditarComponent implements OnInit {
     this.servicePokemon.listBaralhoCard.next(baralhosAtualizados);
   }
 
-  onSelectPokemon(pokemonId: number, event: any) {
+  onSelectPokemon(pokemon: any, event: any) {
     if (event.target.checked) {
-      if (!this.baralho.cards.includes(pokemonId)) {
-        this.baralho.cards.push(pokemonId);
+      if (!this.baralho.cards.includes((pokemon) => pokemon.id === pokemon.id)) {
+        this.baralho.cards.push(pokemon);
       }
     } else {
       this.baralho.cards = this.baralho.cards.filter(
-        (id) => id !== pokemonId
+        (id) => id !== pokemon
       );
     }
   }
